@@ -60,4 +60,15 @@ public class ExtensionObject implements Serializable {
             System.out.println(obiekt + "\n");
         }
     }
+
+    public static <T extends ExtensionObject> void deleteObject(T obj) throws Exception {
+        Class objectsClass = obj.getClass();
+        if(extension.containsKey(objectsClass)) {
+            if (extension.get(objectsClass).contains(obj)) {
+                extension.get(objectsClass).remove(obj);
+            } else {
+                throw new Exception("Object does not exist in extension");
+            }
+        }
+    }
 }

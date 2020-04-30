@@ -1,49 +1,52 @@
 package com.pjwstk.MAS.beerapp;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-public class Event {
+//Asocjacja z kwalifikatorem Event *-1 Bar
+public class Event extends ExtensionObject{
     private String name;
     private Bar bar;
-    private LocalDate startTime;
-    private LocalDate endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
-    public Event(String name, Bar bar, LocalDate startTime, LocalDate endTime) {
+    public Event(String name, Bar bar, LocalDateTime startTime, LocalDateTime endTime) throws Exception {
+        super();
         this.name = name;
         this.bar = bar;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.bar.addEvent(this);
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Bar getBar() {
         return bar;
     }
 
-    public void setBar(Bar bar) {
-        this.bar = bar;
+    public void setBar(Bar bar) throws Exception {
+        if(this.bar != bar) {
+            this.bar.deleteEvent(name);
+            this.bar = bar;
+            this.bar.addEvent(this);
+        }
     }
 
-    public LocalDate getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDate startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDate getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDate endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
@@ -51,7 +54,6 @@ public class Event {
     public String toString() {
         return "Event{" +
                 "name='" + name + '\'' +
-                ", bar=" + bar +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 '}';

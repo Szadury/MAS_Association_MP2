@@ -3,24 +3,33 @@ package com.pjwstk.MAS.beerapp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Owner {
-    List<Bar> barList;
+//Asocjacja zwykła poprzez referencje Owner *-* Bar
+public class Owner extends ExtensionObject{
+    private List<Bar> barList = new ArrayList<>();
     private String name;
     private String email;
     private String password;
 
-    public Owner(List<Bar> barList, String name, String email, String password) {
-        this.barList = barList;
+
+    public Owner(String name, String email, String password) {
+        super();
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-    public Owner(String name, String email, String password) {
-        this.barList = new ArrayList<>();
-        this.name = name;
-        this.email = email;
-        this.password = password;
+    public void addBar(Bar bar) {
+        if(!barList.contains(bar)) {
+            barList.add(bar);
+            bar.addOwner(this);
+        }
+    }
+
+    public void deleteBar(Bar bar){
+        if(barList.contains(bar)){
+            barList.remove(bar);
+            bar.deleteOwner(this);
+        }
     }
 
     public List<Bar> getBarList() {
@@ -58,8 +67,7 @@ public class Owner {
     @Override
     public String toString() {
         return "Owner{" +
-                "barList=" + barList +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';

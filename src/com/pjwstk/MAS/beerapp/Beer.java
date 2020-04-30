@@ -3,27 +3,37 @@ package com.pjwstk.MAS.beerapp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Beer {
+//Asocjacja z atrybutem Beer *-1 BeerBar 1-* Bar
+//Kompozycja Piwo *-1 Producent
+
+public class Beer extends ExtensionObject{
     private String name;
     private Double percentage;
     private String beerType;
-    Producer producer;
-    List<BeerBar> beerBarList;
+    private Producer producer;
+    private List<BeerBar> beerBarList = new ArrayList<>();
 
     private Beer(Producer producer, String name, Double percentage, String beerType) {
+        super();
         this.name = name;
         this.percentage = percentage;
         this.beerType = beerType;
         this.producer = producer;
-        this.beerBarList = new ArrayList<>();
     }
-    public static Beer createBeer(Producer producer, String name, Double percentage, String beerType, List<BeerBar> beerBarList) throws Exception{
+
+    public static Beer createBeer(Producer producer, String name, Double percentage, String beerType) throws Exception{
         if(producer == null){
             throw new Exception("Given producer does not exist!");
         }
         Beer beer = new Beer(producer, name, percentage, beerType);
         producer.addBeer(beer);
         return beer;
+    }
+
+    public void addBeerRelation(BeerBar beerBar) {
+        if(!beerBarList.contains(beerBar)) {
+            beerBarList.add(beerBar);
+        }
     }
 
     public String getName() {
@@ -66,14 +76,19 @@ public class Beer {
         this.beerBarList = beerBarList;
     }
 
+
     @Override
     public String toString() {
         return "Beer{" +
                 "name='" + name + '\'' +
                 ", percentage=" + percentage +
                 ", beerType='" + beerType + '\'' +
-                ", producer=" + producer +
                 ", beerBarList=" + beerBarList +
+                ", producer=" + producer.getName() +
                 '}';
+    }
+
+    public void deleteBarRelation(BeerBar beerBar) {
+        beerBarList.remove(beerBar);
     }
 }
